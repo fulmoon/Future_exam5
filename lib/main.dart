@@ -59,7 +59,9 @@ class _MyHomePageState extends State<MyHomePage> {
               style: Theme.of(context).textTheme.headline4,
             ),
             ElevatedButton(
-                onPressed: exam5,
+                onPressed: (){
+                  pastman = exam5();
+                },
                 child: const Text('Future 연습5'),
             )
           ]
