@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Exam5'),
     );
   }
 }
@@ -29,17 +30,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var Greatman = ['이순신', '세종대왕', '광개토대왕', '다빈치', '피타고라스', '다윈', '에디슨', '아인슈타인', '링컨', '튜링', ];
+  var greatMan = ['이순신', '세종대왕', '광개토대왕', '다빈치', '피타고라스', '다윈', '에디슨', '아인슈타인', '링컨', '튜링', ];
   int index = 0;
-  String pastman = '';
-
-  String exam5() {
-    setState(() {
-      index++;
-    });
-    String result = Greatman[index];
-    return result;
-  }
+  String pastMan = '';
+  bool isLoading = false;
+  var randomNumber = Random();
 
   @override
   Widget build(BuildContext context) {
@@ -54,20 +49,43 @@ class _MyHomePageState extends State<MyHomePage> {
             const Text(
               '당신 전생은?',
             ),
-            Text(
-              '$pastman',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+            _buildText(),
             ElevatedButton(
-                onPressed: (){
-                  pastman = exam5();
+                onPressed: () async {
+                  pastMan = await exam5();
                 },
                 child: const Text('Future 연습5'),
-            )
+            ),
           ]
         ),
       ),
+    );
+  }
 
+  Future<String> exam5() async{
+    setState(() {
+      //index++;
+      isLoading = true;
+    });
+
+    await Future.delayed(const Duration(seconds: 3));
+
+    setState((){
+      index = randomNumber.nextInt(greatMan.length);
+      isLoading = false;
+    });
+
+    String result = greatMan[index];
+    return result;
+  }
+
+  Widget _buildText(){
+    if (isLoading){
+      return const CircularProgressIndicator();
+    }
+    return Text(
+      pastMan,
+      style: Theme.of(context).textTheme.headline4,
     );
   }
 }
